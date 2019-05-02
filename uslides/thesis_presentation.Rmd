@@ -11,7 +11,7 @@ output: uslides::uslides_pdf
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE, size = "\\scriptsize")
+knitr::opts_chunk$set(collapse = TRUE, size = "\\scriptsize") 
 ```
 
 ## Slide title

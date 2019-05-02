@@ -1,0 +1,435 @@
+---
+title: "¿La aversión al riesgo afecta el retorno esperado de las acciones?"
+# subtitle: "Aplicaciones y usos en R"
+author: "Gabriel Cabrera G."
+date: '`r glue::glue(lubridate::day(Sys.Date())," de ", paste(toupper(substring(months(Sys.Date()), 1,1)), substring(months(Sys.Date()), 2), sep="", collapse=" "), " del ", lubridate::year(Sys.Date()))`'
+righlogo: "logo-u-de-chile.png"
+institute: |
+  | Universidad de Chile
+  | Facultad de Economía y Negocios
+  
+email: "gcabrerag@fen.uchile.cl"
+website: "gcabrerag.rbind.io"
+twitter: "GaboC_g"
+github: "GaboCg"
+ubication: "Facultad de Economía & Negocios, Universidad de Chile"
+
+output: 
+  beamer_presentation:
+    theme: "Madrid" # AnnArbor
+    colortheme: "default" 
+    # fonttheme: "structurebold"
+    template: template_beamer.tex
+    slide_level: 2
+    citation_package: biblatex
+    latex_engine: xelatex
+
+bibliography: "biblio.bib"
+biblio-style: "plainnat"
+biblio-title: "Referencia"
+link-citations: true
+# citecolor: green
+classoption: "aspectratio=169" 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Motivación 
+
+## Motivación 
+
+1. La aversion al riesgo cumple un rol en los modelos teóricos de *asset pricing* y *portfolio allocation* [@merton1973intertemporal].
+
+2. La variable no es observable y dificil de estimar.
+
+3. Existe una amplia literatura respecto a predictibilidad accionaria, sin embargo, son pocos los predictores útiles [@welch2007comprehensive].
+
+
+# Estudios Relacionados 
+
+## Estudios Relacionados {.allowframebreaks}
+
+1. @welch2007comprehensive examinan el desempeño \red{out-of-sample}  de 14 variables económicas financieras, la evidencia empirica es débil.
+
+2. @campbell2007predicting imponen restricciones económicas al predecir \red{out-of-sample}, los resultados mejoran.
+
+3. @rapach2013international documentan que tanto la tasa de interes nominal como el \red{dividend yield} poseen capacidad predictiva.
+
+4. Estudios recientes han investigado el poder predictivo de nuevas variables.
+
+    1. @schmeling2009investor examina si el \red{consumer confidence index} como proxy de \red{investor sentiment}, efecta el retorno accionario esperado. Encuetrna una relación negativa para una muestra de 18 países industrializados.
+    
+    2. @neely2014forecasting utiliza indicadores técnicos (e.g media movil, momentum y \red{volume-based rules}).
+    
+    3. @brogaard2015asset encuentran que el EPU puede predicir luego de dos a tres meses. 
+
+\newpage
+
+5. Otra literatura es aquella que utiliza información proveniente de las opciones. La más utilizada
+es el \red{variance risk premium}. 
+
+    1. @bollerslev2009expected documentan que el VRP para Estados Unidos explica una fracción del retorno, después del tercer mes. 
+    
+    2. En @bollerslev2014stock verifican que el comportamiento del VRP se repite en otros países. Sin embargo, existe un grado de heterogeneidad entre la muestra.
+    
+    3. Finalmente, @bollerslev2011dynamic proveen evidencia que el ratio \red{P/E}, \red{industrial production} y \red{non-farm Payroll employment} poseen poder predictivo al ser considerados en la construcción de una varible proxy de aversion al riesgo.
+    
+
+# Estimación Aversion al riesgo 
+
+## Motivación Teórica {.allowframebreaks}
+
+
+
+## Estimación GMM {.allowframebreaks}
+
+1. Dados los momentos de (1) y (2), se utiliza el método de estimación GMM.
+
+$$
+\hat{\xi_{t}} =\text{arg}\min_{\xi}g_{t}(\xi)'Wg_{t}({\xi})
+$$
+
+2. A los momentos se le agrega el rezago de la volatilidad realizada como instrumento (sobreidentificación).
+
+3. La matriz de varianza y covarianza fue estimada utilizando la correción de \red{Newey-West (NW)} con un rezago de cinco y \red{Bartlett-kernel}. 
+
+\newpage
+
+$$
+f_t(\xi) \equiv \left(\begin{array}{c}
+                \nu_{t+\Delta,t+2\Delta} - \alpha_{\Delta} \nu_{t,t+\Delta} - \beta_{\Delta} \\
+                (\nu_{t+\Delta,t+2\Delta} - \alpha_{\Delta} \nu_{t,t+\Delta} - \beta_{\Delta})\nu_{t-\Delta,t} \\
+                \nu_{t,t+\Delta} - \mathcal{A}_{\Delta} iv^{*}_{t,t+\Delta} - \mathfrak{B}_{\Delta} \\
+                (\nu_{t,t+\Delta} - \mathcal{A}_{\Delta} iv^{*}_{t,t+\Delta} - \mathfrak{B}_{\Delta})\nu_{t-\Delta,t}
+                \end{array}\right)
+$$
+
+## Datos
+
+1. La muestra está compuesta por 8 países; Francia, Alemania, Reino Unido, China, Japón, Suiza, Estados Unidos y Corea del Sur.
+
+2. La volatilidad realizada es computada para cada mes como la suma al cuadrado de los retornos diarios en es mes.
+
+$$
+RV_{t}\equiv\sum_{i=1}^{n}\left(p_{t+\frac{i}{n}}-p_{t+\frac{i-1}{n}}\right)^{2}
+$$
+
+3. La volatilidad implicita se obtiene del índice VIX de cada país.
+
+## Estadística Descriptiva
+
+\begin{table}
+\caption{\scriptsize Summary Statistics for Monthly Realized and Implied Volatility\label{tab:Summary-Statistics}}
+\vspace{-0.30cm}
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{lcccccccccccccccc}
+\toprule 
+ & \multicolumn{2}{c}{CAC 40} & \multicolumn{2}{c}{DAX 30} & \multicolumn{2}{c}{FTSE 100} & \multicolumn{2}{c}{HSI} & \multicolumn{2}{c}{NIKKEI 225} & \multicolumn{2}{c}{SMI 20} & \multicolumn{2}{c}{S\&P 500} & \multicolumn{2}{c}{KOSPI}\tabularnewline
+\midrule 
+ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$ & $RV_t$ & $IV_t$\tabularnewline
+\midrule
+Mean & 20.68  & 23.11  & 21.81 & 22.49  & 16.48  & 19.83  & 19.93  & 23.12  & 21.51  & 25.29  & 16.03 & 18.41 & 15.21 & 19.5 & 17.89  & 21.56 \tabularnewline
+SD & 11.01  & 8.40  & 11.43  & 8.41  & 9.57  & 8.31  & 11.49  & 9.73  & 10.57  & 8.79 & 9.52  & 7.46  & 9.05  & 7.5  & 10.12 & 9.26 \tabularnewline
+Skew. & 1.94  & 1.54  & 1.85  & 1.5  & 2.43  & 1.73 & 3.39  & 2.15  & 3.35  & 2.45  & 2.58  & 2.16 & 2.89  & 1.7  & 2.67  & 2 \tabularnewline
+Kurt. & 5.87  & 2.79  & 4.55  & 2.11  & 9.49 & 4.01  & 19.24  & 6.08  & 22.07 & 10.12  & 9.55  & 6.1  & 13.48  & 4.46  & 12.13  & 5.95 \tabularnewline
+Min. & 6.75  & 11.97  & 6.32  & 11.67  & 4.17 & 9.99  & 6.66  & 11.8  & 6.34  & 12.21  & 5.73  & 9.26  & 4.24  & 10.26  & 5.91  & 10.75 \tabularnewline
+5 \%  & 9.32  & 13.55  & 10.02  & 13.39  & 7.3  & 11.09  & 9.81  & 13.66  & 9.92  & 15.22  & 7.36  & 11.39  & 6.71 & 11.56 & 8.06  & 11.86 \tabularnewline
+25 \%. & 13.07  & 17.46  & 14.58  & 16.89  & 10.27  & 13.94  & 13.48 & 16.63  & 15.39  & 19.61  & 10.44  & 13.77 & 9.66  & 13.75  & 11.69  & 15.03 \tabularnewline
+50 \% & 18.62  & 21.41  & 18.57  & 20.74 & 14.12  & 17.6  & 16.87  & 20.36  & 19.33  & 24.07  & 13.31  & 16.14  & 12.86  & 17.66  & 15.61  & 19.51 \tabularnewline
+75 \%  & 24.32  & 25.77 & 25.31  & 25.65 & 19.22  & 23.26  & 22.53  & 26.2  & 25.64 & 28.31  & 18.15 & 20.2  & 17.61 & 23.52  & 20.58  & 24.92 \tabularnewline
+95 \% & 45.35  & 41.49  & 42.65  & 41.14  & 35.28  & 36.58  & 41.76  & 43.23  & 40.58  & 37.72  & 37.01  & 34.49  & 30.18  & 32.04  & 37.76  & 36.48\tabularnewline
+Max. & 84.61  & 59.09 & 80.62 & 52.78 & 79.29 & 59.98 & 110.26  & 71.97  & 109.61 & 78.9  & 77.64 & 56.92  & 82.92 & 59.89 & 86.8 & 70.29\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+#  Time-varying Risk Aversion
+
+## Estimación País 
+
+1. @bollerslev2011dynamic muestra que la \red{volatility risk premium} es proporcional a la aversión al riesgo del inversionista, aproximandose mediante $-\lambda$.
+
+2. Para incorporar variación en el tiempo, se implementa un AR(1) aumentado.
+
+$$
+\lambda_{t+1} = \alpha + b \lambda_{t} + \sum^{k}_{k=1}c_{k}\times state_{t,k}
+$$
+
+3. Se incluye en $x_{t,k}$ el rezago de la volatilidad realizada al cuadrado, rezago de la volatilidad implícita y con cunjunto de varialbes macro-financieras.
+\red{Aaa corporate bond spreads}, \red{housing starts}, \red{industrial production}, \red{Producer price index}, \red{Total payroll employment} y \red{Price-earnings (PE) ratio}.
+
+## 
+
+\begin{table}[H]
+\caption{\scriptsize GMM Estimates of Constant and Time-Varying Volatility Risk Premium Function}
+\resizebox{0.9\textwidth}{!}{%
+\centering
+\begin{tabular}{lcccccccccccccccc}
+\toprule 
+ & \multicolumn{2}{c}{France (CAC 40)} & \multicolumn{2}{c}{Germany (DAX 30)} & \multicolumn{2}{c}{UK (FTSE 100)} & \multicolumn{2}{c}{China (HSI)}\tabularnewline
+\midrule
+ & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance\tabularnewline
+\midrule
+$\lambda$ & -4.705{*} &  & -1.776 &  & -2.578{*}{*}{*} &  & -2.031{*}{*} & \tabularnewline
+ & (2.559) &  & (1.232) &  & (0.540) &  & (1.003) & \tabularnewline
+$\alpha$ &  & -0.527{*}{*}{*} &  & -0.435{*}{*}{*} &  & -0.526{*}{*}{*} &  & -0.527{*}{*}{*}\tabularnewline
+ &  & (0.070) &  & (0.160) &  & (0.026) &  & (0.178)\tabularnewline
+$\beta$ &  & 0.812{*}{*}{*} &  & 0.779{*}{*}{*} &  & 0.818{*}{*}{*} &  & 0.855{*}{*}{*}\tabularnewline
+ &  & (0.035) &  & (0.038) &  & (0.012) &  & (0.061)\tabularnewline
+$c_{1}$ Realized Volatility &  & -0.323{*}{*}{*} &  & -0.319{*}{*}{*} &  & -0.317{*}{*}{*} &  & -0.319{*}\tabularnewline
+ &  & (0.105) &  & (0.079) &  & (0.100) &  & (0.173)\tabularnewline
+$c_{2}$ Aaa Bond &  & 0.190{*}{*} &  & 0.192{*}{*}{*} &  & 0.187{*}{*}{*} &  & 0.291{*}{*}\tabularnewline
+ &  & (0.086) &  & (0.036) &  & (0.061) &  & (0.127)\tabularnewline
+$c_{3}$ Housing Start &  & -0.325 &  & -0.103{*}{*} &  & -0.212{*}{*}{*} &  & -0.230\tabularnewline
+ &  & (0.288) &  & (0.046) &  & (0.071) &  & (0.253)\tabularnewline
+$c_{4}$ Industrial Production &  & 0.137 &  & 0.091{*}{*}{*} &  & 0.069{*}{*} &  & 0.041\tabularnewline
+ &  & (0.095) &  & (0.022) &  & (0.027) &  & (0.029)\tabularnewline
+$c_{5}$ Producer Price Index &  & -0.056 &  & -0.034 &  & -0.037{*}{*}{*} &  & -0.031\tabularnewline
+ &  & (0.062) &  & (0.048) &  & (0.010) &  & (0.097)\tabularnewline
+$c_{6}$ Payroll Employment &  & -0.032{*}{*}{*} &  & -0.045{*}{*}{*} &  & -0.048 &  & -0.052\tabularnewline
+ &  & (0.011) &  & (0.007) &  & (0.052) &  & (0.127)\tabularnewline
+$c_{7}$ PE Ratio &  & 0.440{*}{*} &  & 0.384{*}{*}{*} &  & 0.393{*}{*}{*} &  & 0.302{*}{*}\tabularnewline
+ &  & (0.190) &  & (0.086) &  & (0.129) &  & (0.152)\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+##
+
+\begin{table}[H]
+\caption{GMM Estimates of Constant and Time-Varying Volatility Risk Premium Function}
+\resizebox{0.9\textwidth}{!}{%
+\centering
+\begin{tabular}{lcccccccccccccccc}
+\toprule 
+ & \multicolumn{2}{c}{Japan (NIKKEI 225)} & \multicolumn{2}{c}{Switzerland (SMI 20)} & \multicolumn{2}{c}{US (S\&P 500)} & \multicolumn{2}{c}{South Korea (KOSPI)}\tabularnewline
+\midrule
+ & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance & Constant & Macro 
+
+Finance\tabularnewline
+\midrule
+$\lambda$ & -3.118{*}{*} &  & -3.153{*}{*}{*} &  & -2.504{*}  &  & -3.382{*}{*}{*} & \tabularnewline
+ & (1.565) &  & (0.756) &  & (1.347) &  & (0.986) & \tabularnewline
+$\alpha$ &  & -0.232{*} &  & -0.777{*}{*}{*} &  & -0.200 &  & -0.320{*}{*}{*}\tabularnewline
+ &  & (0.127) &  & (0.229) &  & (0.120) &  & (0.042)\tabularnewline
+$\beta$ &  & 0.931{*}{*}{*} &  & 0.425{*}{*}{*} &  & 0.740{*}{*}{*} &  & 0.890{*}{*}{*}\tabularnewline
+ &  & (0.019) &  & (0.087) &  & (0.222) &  & (0.017)\tabularnewline
+$c_{1}$ Realized Volatility &  & -0.319{*}{*}{*} &  & -0.362{*}{*}{*} &  & -0.423{*}{*} &  & -0.216\tabularnewline
+ &  & (0.055) &  & (0.076) &  & (0.194) &  & (0.166)\tabularnewline
+$c_{2}$ Aaa Bond &  & 0.191{*}{*}{*} &  & 0.210{*}{*}{*} &  & 0.251{*}{*}{*} &  & 0.192{*}\tabularnewline
+ &  & (0.054) &  & (0.042) &  & (0.088) &  & (0.106)\tabularnewline
+$c_{3}$ Housing Start &  & -0.230{*}{*}{*} &  & -0.201{*}{*}{*} &  & -0.212{*}{*}{*} &  & -0.233{*}{*}\tabularnewline
+ &  & (0.088) &  & (0.062) &  & (0.063) &  & (0.112)\tabularnewline
+$c_{4}$ Industrial Production &  & 0.037 &  & 0.079{*}{*}{*} &  & 0.093{*}{*}{*} &  & 0.056\tabularnewline
+ &  & (0.118) &  & (0.029) &  & (0.023) &  & (0.073)\tabularnewline
+$c_{5}$ Producer Price Index &  & -0.052 &  & -0.083{*}{*}{*} &  & -0.045{*}{*}{*} &  & -0.061{*}\tabularnewline
+ &  & (0.093) &  & (0.028) &  & (0.011) &  & (0.036)\tabularnewline
+$c_{6}$ Payroll Employment &  & -0.030 &  & 0.018 &  & -0.034 &  & -0.052\tabularnewline
+ &  & (0.096) &  & (0.049) &  & (0.031) &  & (0.062)\tabularnewline
+$c_{7}$ PE Ratio &  & 0.302{*}{*} &  & 0.302{*}{*}{*} &  & 0.114{*}{*} &  & 0.264\tabularnewline
+ &  & (0.137) &  & (0.067) &  & (0.057) &  & (0.195)\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+## Time-Varying Risk Aversion & Business Cycle 
+
+1. @kim2014counter evidencia que la correlación dinámica  entre la aversión al riesgo y el desempleo disminuye a lo largo del tiempo. Concluyendo que la variable tiene un comportamiento contra cíclico. 
+$$
+Corr(-\lambda_{t}^{i},Uempl_{t+k}^{i})
+$$
+
+\vspace{-0.5cm}
+
+\begin{table}[H]
+\caption{Correlation between Time-varying Risk Aversion and Unemployment Rate\label{tab:Correlation-between-time-varying}}
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{lccccccccccc}
+\toprule 
+Countries (Indices) & $t-5$ & $t-4$ & $t-3$ & $t-2$ & $t-1$ & $t$ & $t+1$ & $t+2$ & $t+3$ & $t+4$ & $t+5$\tabularnewline
+\midrule
+France (CAC 40) & 0.412{*}{*}{*} & 0.410{*}{*}{*} & 0.406{*}{*}{*} & 0.399{*}{*}{*} & 0.389{*}{*}{*} & 0.376{*}{*}{*} & 0.360{*}{*}{*} & 0.339{*}{*}{*} & 0.317{*}{*}{*} & 0.291{*}{*}{*} & 0.261{*}{*}{*}\tabularnewline
+Germany (DAX 30) & 0.125{*} & 0.122{*} & 0.119{*} & 0.116{*} & 0.113 & 0.108 & 0.103 & 0.099 & 0.094 & 0.090 & 0.086\tabularnewline
+UK (FTSE 100) & 0.311{*}{*}{*} & 0.327{*}{*}{*} & 0.340{*}{*}{*} & 0.347{*}{*}{*} & 0.350{*}{*}{*} & 0.350{*}{*}{*} & 0.341{*}{*}{*} & 0.330{*}{*}{*} & 0.316{*}{*}{*} & 0.301{*}{*}{*} & 0.285{*}{*}{*}\tabularnewline
+China (HSI) & 0.379{*}{*}{*} & 0.333{*}{*}{*} & 0.283{*}{*}{*} & 0.232{*}{*}{*} & 0.184{*}{*} & 0.140{*} & 0.109 & 0.085 & 0.067 & 0.055 & 0.046\tabularnewline
+Japan (NIKKEI 225) & 0.262{*}{*}{*} & 0.234{*}{*}{*} & 0.205{*}{*}{*} & 0.175{*}{*} & 0.146{*}{*} & 0.117{*} & 0.092 & 0.069 & 0.050 & 0.032 & 0.015\tabularnewline
+Switzerland (SMI 20) & 0.449{*}{*}{*} & 0.458{*}{*}{*} & 0.454{*}{*}{*} & 0.440{*}{*}{*} & 0.412{*}{*}{*} & 0.356{*}{*}{*} & 0.326{*}{*}{*} & 0.294{*}{*}{*} & 0.260{*}{*}{*} & 0.225{*}{*}{*} & 0.188{*}{*}{*}\tabularnewline
+US (S\&P 500) & 0.376{*}{*}{*} & 0.348{*}{*}{*} & 0.318{*}{*}{*} & 0.283{*}{*}{*} & 0.247{*}{*}{*} & 0.208{*}{*}{*} & 0.164{*}{*} & 0.121{*} & 0.080 & 0.039 & 0.001\tabularnewline
+South Korea (KOSPI) & 0.132{*} & 0.125 & 0.120 & 0.117 & 0.113 & 0.099 & 0.084 & 0.077 & 0.060 & 0.041 & 0.019\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+# Predictibilidad de los Retornos Accionarios
+
+## Estimación Panel 
+
+$$
+h^{-1}r_{t,t+h}^{i}=a(h)+b(h)TVRA_{t}^{i}+\gamma(h)'\mathbf{X}_{t}^{i} + \alpha_{i} + u_{t,t+h}^{i} \qquad h=1,2,...,12 
+$$
+
+##
+
+\begin{table}[H]
+\caption{\scriptsize Panel Stock Return Predictability Regressions}
+\vspace{-0.30cm}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{lccccccccccccc}
+\toprule 
+\multicolumn{13}{c}{%
+Panel A: Baseline %
+}\tabularnewline
+\midrule 
+{Horizon} & {1} & {2} & {3} & {4} & {5} & {6} & {7} & {8} & {9} & {10} & {11} & {12}\tabularnewline
+\midrule
+{$TVRA$} & {1.212{*}{*}{*}} & {0.621{*}{*}{*}} & {0.413{*}{*}{*}} & {0.312{*}{*}{*}} & {0.246{*}{*}{*}} & {0.206{*}{*}{*}} & {0.179{*}{*}{*}} & {0.157{*}{*}{*}} & {0.142{*}{*}{*}} & {0.126{*}{*}{*}} & {0.113{*}{*}{*}} & {0.105{*}{*}{*}}\tabularnewline
+{} & {(0.445)} & {(0.222)} & {(0.148)} & {(0.112)} & {(0.090)} & {(0.074)} & {(0.064)} & {(0.055)} & {(0.049)} & {(0.045)} & {(0.041)} & {(0.037)}\tabularnewline
+{\%Adj. $R^{2}$} & {0.22} & {0.23} & {0.23} & {0.23} & {0.22} & {0.22} & {0.23} & {0.23} & {0.24} & {0.23} & {0.23} & {0.23}\tabularnewline
+{Obs.} & {1627} & {1619} & {1611} & {1603} & {1595} & {1587} & {1579} & {1571} & {1563} & {1555} & {1547} & {1539}\tabularnewline
+\midrule 
+\multicolumn{13}{c}{%
+Panel B: Baseline + Variance Risk Premium
+}\tabularnewline
+\midrule
+{$TVRA$} & {1.191{*}{*}{*}} & {0.610{*}{*}{*}} & {0.406{*}{*}{*}} & {0.307{*}{*}{*}} & {0.242{*}{*}{*}} & {0.202{*}{*}{*}} & {0.176{*}{*}{*}} & {0.155{*}{*}{*}} & {0.139{*}{*}{*}} & {0.124{*}{*}{*}} & {0.112{*}{*}{*}} & {0.103{*}{*}{*}}\tabularnewline
+{} & {(0.421)} & {(0.209)} & {(0.139)} & {(0.105)} & {(0.084)} & {(0.070)} & {(0.059)} & {(0.052)} & {(0.046)} & {(0.042)} & {(0.038)} & {(0.035)}\tabularnewline
+{$VRP$} & {0.198{*}} & {0.099{*}{*}} & {0.066{*}{*}} & {0.050{*}{*}} & {0.040{*}} & {0.033{*}{*}} & {0.028{*}{*}} & {0.025{*}{*}} & {0.022{*}{*}} & {0.020{*}{*}} & {0.018{*}{*}} & {0.016{*}}\tabularnewline
+{} & {(0.064)} & {(0.032)} & {(0.021)} & {(0.016)} & {(0.013)} & {(0.011)} & {(0.009)} & {(0.008)} & {(0.007)} & {(0.006)} & {(0.006)} & {(0.005)}\tabularnewline
+{\% Adj. $R^{2}$} & {2.07} & {2.08} & {2.09} & {2.1} & {2.09} & {2.1} & {2.11} & {2.11} & {2.11} & {2.09} & {2.08} & {2.07}\tabularnewline
+{Obs.} & {1627} & {1619} & {1611} & {1603} & {1595} & {1587} & {1579} & {1571} & {1563} & {1555} & {1547} & {1539}\tabularnewline
+\midrule 
+\multicolumn{13}{c}{%
+Panel C: Baseline + Investor Sentiment
+}\tabularnewline
+\midrule
+{$TVRA$} & {1.147{*}{*}} & {0.588{*}{*}} & {0.391{*}{*}} & {0.296{*}{*}} & {0.234{*}{*}} & {0.196{*}{*}} & {0.170{*}{*}{*}} & {0.149{*}{*}{*}} & {0.135{*}{*}{*}} & {0.120{*}{*}{*}} & {0.108{*}{*}{*}} & {0.100{*}{*}{*}}\tabularnewline
+{} & {(0.463)} & {(0.229)} & {(0.152)} & {(0.115)} & {(0.093)} & {(0.077)} & {(0.065)} & {(0.057)} & {(0.050)} & {(0.046)} & {(0.042)} & {(0.038)}\tabularnewline
+{$Sentiment$} & {-0.131} & {-0.068} & {-0.046} & {-0.035} & {-0.028} & {-0.023} & {-0.021} & {-0.018} & {-0.017} & {-0.015} & {-0.014} & {-0.013}\tabularnewline
+{} & {(0.090)} & {(0.046)} & {(0.031)} & {(0.023)} & {(0.018)} & {(0.015)} & {(0.013)} & {(0.012)} & {(0.010)} & {(0.009)} & {(0.008)} & {(0.008)}\tabularnewline
+{\% Adj. $R^{2}$} & {0.31} & {0.33} & {0.34} & {0.34} & {0.33} & {0.34} & {0.35} & {0.35} & {0.37} & {0.36} & {0.35} & {0.37}\tabularnewline
+{Obs.} & {1561} & {1553} & {1545} & {1537} & {1529} & {1521} & {1513} & {1505} & {1497} & {1489} & {1481} & {1473}\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{center}
+\end{table}
+
+##
+
+\begin{table}[H]
+\caption{\scriptsize Panel Stock Return Predictability Regressions}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{lccccccccccccc}
+\toprule 
+\multicolumn{13}{c}{%
+Panel A: Baseline %
+}\tabularnewline
+\midrule 
+{Horizon} & {1} & {2} & {3} & {4} & {5} & {6} & {7} & {8} & {9} & {10} & {11} & {12}\tabularnewline
+\midrule 
+\multicolumn{13}{c}{%
+Panel D: Baseline + Economic Uncertainty
+}\tabularnewline
+\midrule
+{$TVRA$} & {1.161{*}{*}{*}} & {0.592{*}{*}{*}} & {0.394{*}{*}{*}} & {0.296{*}{*}{*}} & {0.234{*}{*}{*}} & {0.196{*}{*}{*}} & {0.170{*}{*}{*}} & {0.150{*}{*}{*}} & {0.136{*}{*}{*}} & {0.121{*}{*}{*}} & {0.110{*}{*}{*}} & {0.101{*}{*}{*}}\tabularnewline
+{} & {(0.431)} & {(0.214)} & {(0.142)} & {(0.107)} & {(0.086)} & {(0.071)} & {(0.061)} & {(0.053)} & {(0.047)} & {(0.043)} & {(0.040)} & {(0.036)}\tabularnewline
+{$Uncertainty$} & {0.035} & {0.017} & {0.011} & {0.009} & {0.007} & {0.006} & {0.005} & {0.004} & {0.003} & {0.003} & {0.002} & {0.002}\tabularnewline
+{} & {(0.022)} & {(0.011)} & {(0.008)} & {(0.006)} & {(0.005)} & {(0.004)} & {(0.004)} & {(0.003)} & {(0.003)} & {(0.003)} & {(0.003)} & {(0.002)}\tabularnewline
+{\% Adj. $R^{2}$} & {0.39} & {0.4} & {0.4} & {0.4} & {0.41} & {0.41} & {0.39} & {0.38} & {0.37} & {0.36} & {0.32} & {0.31}\tabularnewline
+{Obs.} & {1428} & {1421} & {1414} & {1407} & {1400} & {1393} & {1386} & {1379} & {1372} & {1365} & {1358} & {1351}\tabularnewline
+\midrule
+\multicolumn{13}{c}{%
+Panel E: Baseline + All controls variables 
+}\tabularnewline
+\midrule
+{$TVRA$} & {1.1684{*}{*}{*}} & {0.5950{*}{*}{*}} & {0.3946{*}{*}{*}} & {0.2973{*}{*}{*}} & {0.2337{*}{*}{*}} & {0.1950{*}{*}{*}} & {0.1690{*}{*}{*}} & {0.1478{*}{*}{*}} & {0.1337{*}{*}{*}} & {0.1193{*}{*}{*}} & {0.1082{*}{*}{*}} & {0.1005{*}{*}{*}}\tabularnewline
+{} & {(0.4294)} & {(0.2115)} & {(0.1405)} & {(0.1061)} & {(0.0860)} & {(0.0715)} & {(0.0601)} & {(0.0522)} & {(0.0465)} & {(0.0419)} & {(0.0386)} & {(0.0349)}\tabularnewline
+{$VRP$} & {0.2079{*}{*}} & {0.1038{*}{*}} & {0.0693{*}{*}} & {0.0521{*}{*}} & {0.0417{*}{*}} & {0.0348{*}{*}} & {0.0298{*}{*}{*}} & {0.0260{*}{*}{*}} & {0.0230{*}{*}} & {0.0207{*}{*}{*}} & {0.0188{*}{*}{*}} & {0.0171{*}{*}}\tabularnewline
+{} & {(0.0648)} & {(0.0324)} & {(0.0216)} & {(0.0162)} & {(0.0129)} & {(0.0108)} & {(0.0092)} & {(0.0080)} & {(0.0071)} & {(0.0064)} & {(0.0058)} & {(0.0053)}\tabularnewline
+{$Sentiment$} & {-0.0821} & {-0.0432} & {-0.0299} & {-0.0226} & {-0.0171} & {-0.0144} & {-0.0130} & {-0.0117} & {-0.0108} & {-0.0095} & {-0.0088} & {-0.0085}\tabularnewline
+{} & {(0.0648)} & {(0.0331)} & {(0.0223)} & {(0.0168)} & {(0.0132)} & {(0.0107)} & {(0.0094)} & {(0.0082)} & {(0.0074)} & {(0.0066)} & {(0.0059)} & {(0.0059)}\tabularnewline
+{$Uncertainty$} & {0.0530{*}{*}{*}} & {0.0263{*}{*}{*}} & {0.0176{*}{*}{*}} & {0.0135{*}{*}{*}} & {0.0112{*}{*}{*}} & {0.0092{*}{*}{*}} & {0.0077{*}{*}{*}} & {0.0065{*}{*}{*}} & {0.0057{*}{*}{*}} & {0.0052{*}{*}{*}} & {0.0045{*}{*}{*}} & {0.0040{*}{*}}\tabularnewline
+{} & {(0.0201)} & {(0.0100)} & {(0.0068)} & {(0.0052)} & {(0.0042)} & {(0.0035)} & {(0.0031)} & {(0.0027)} & {(0.0025)} & {(0.0023)} & {(0.0022)} & {(0.0020)}\tabularnewline
+{\% Adj. $R^{2}$} & {2.71} & {2.72} & {2.74} & {2.76} & {2.77} & {2.77} & {2.75} & {2.73} & {2.7} & {2.69} & {2.62} & {2.59}\tabularnewline
+{Obs.} & {1561} & {1553} & {1545} & {1537} & {1529} & {1521} & {1513} & {1505} & {1497} & {1489} & {1481} & {1473}\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{center}
+\end{table}
+
+## Regresión a Nivel País
+
+## 
+
+\begin{table}[H]
+\caption{\scriptsize Stock Return Predictability Regressions by Country}
+\vspace{-0.30cm}
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{lccccccccccccc}
+\toprule 
+{Horizon (h)} & & {1} & {2} & {3} & {4} & {5} & {6} & {7} & {8} & {9} & {10} & {11} & {12}\tabularnewline
+\midrule
+{France}  & {$\hat{\beta}_{TVRA}$} & {1.20} & {0.68} & {0.45} & {0.35} & {0.26} & {0.21} & {0.20} & {0.19} & {0.18} & {0.16} & {0.15} & {0.14}\tabularnewline
+          & {$R^{2}$} & {0.21} & {0.27} & {0.27} & {0.28} & {0.25} & {0.23} & {0.29} & {0.32} & {0.36} & {0.35} & {0.37} & {0.39}\tabularnewline
+{Germany} & {$\hat{\beta}_{TVRA}$} & {0.98} & {0.49} & {0.33} & {0.24} & {0.20} & {0.17{*}} & {0.14{*}} & {0.12{*}{*}} & {0.11{*}{*}} & {0.10{*}{*}} & {0.09{*}{*}{*}} & {0.08{*}{*}{*}}\tabularnewline
+          & {$R^{2}$} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06} & {0.06}\tabularnewline
+{UK}      & {$\hat{\beta}_{TVRA}$} & {1.83{*}{*}{*}} & {0.92{*}{*}{*}} & {0.61{*}{*}{*}} & {0.46{*}{*}{*}} & {0.37{*}{*}{*}} & {0.31{*}{*}{*}} & {0.27{*}{*}{*}} & {0.23{*}{*}{*}} & {0.20{*}{*}{*}} & {0.18{*}{*}{*}} & {0.16{*}{*}{*}} & {0.15{*}{*}{*}}\tabularnewline
+          & {$R^{2}$} & {1.24} & {1.25} & {1.25} & {1.27} & {1.25} & {1.26} & {1.29} & {1.26} & {1.22} & {1.23} & {1.09} & {1.18}\tabularnewline
+{China}   & {$\hat{\beta}_{TVRA}$} & {5.81} & {2.91} & {1.93} & {1.46} & {1.17} & {0.97} & {0.83} & {0.73} & {0.64} & {0.58} & {0.53} & {0.48}\tabularnewline
+          & {$R^{2}$} & {2.32} & {2.33} & {2.31} & {2.38} & {2.38} & {2.37} & {2.37} & {2.37} & {2.37} & {2.40} & {2.41} & {2.41}\tabularnewline
+{Japan}   & {$\hat{\beta}_{TVRA}$} & {1.49{*}{*}{*}} & {0.74{*}{*}{*}} & {0.49{*}{*}{*}} & {0.37{*}} & {0.30} & {0.25} & {0.21} & {0.18} & {0.16} & {0.15} & {0.13} & {0.12}\tabularnewline
+          & {$R^{2}$} & {0.87} & {0.87} & {0.87} & {0.87} & {0.87} & {0.88} & {0.86} & {0.85} & {0.87} & {0.85} & {0.86} & {0.84}\tabularnewline
+{Switzerland } & {$\hat{\beta}_{TVRA}$} & {6.21{*}{*}{*}} & {3.26{*}{*}{*}} & {2.13{*}{*}{*}} & {1.67{*}{*}{*}} & {1.29{*}{*}{*}} & {1.05{*}{*}} & {0.88{*}{*}} & {0.73{*}{*}} & {0.65{*}{*}} & {0.53} & {0.48} & {0.47}\tabularnewline
+          & {$R^{2}$} & {1.06} & {1.15} & {1.08} & {1.17} & {1.06} & {0.99} & {0.95} & {0.85} & {0.82} & {0.67} & {0.66} & {0.75}\tabularnewline
+{US}      & {$\hat{\beta}_{TVRA}$} & {0.54} & {0.27} & {0.19} & {0.15} & {0.12} & {0.12} & {0.11} & {0.11} & {0.11} & {0.09} & {0.08} & {0.07}\tabularnewline
+          & {$R^{2}$} & {0.02} & {0.02} & {0.02} & {0.02} & {0.02} & {0.03} & {0.03} & {0.04} & {0.05} & {0.04} & {0.04} & {0.04}\tabularnewline
+{South Korea} & {$\hat{\beta}_{TVRA}$} & {6.54{*}{*}{*}} & {3.38{*}{*}{*}} & {2.26{*}{*}{*}} & {1.65{*}{*}{*}} & {1.30{*}{*}{*}} & {1.06{*}{*}{*}} & {0.94{*}{*}{*}} & {0.82{*}{*}{*}} & {0.71{*}{*}{*}} & {0.63{*}{*}{*}} & {0.57{*}{*}{*}} & {0.52{*}{*}{*}}\tabularnewline
+          & {$R^{2}$} & {0.95} & {1.02} & {1.02} & {0.97} & {0.93} & {0.90} & {0.94} & {0.95} & {0.91} & {0.89} & {0.87} & {0.86}\tabularnewline
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+# Conclusiones
+
+## Conclusiones
+
+1. La función de aversión al riesgo es contra cíclica, consitente con la teoría de \red{asset pricing}.
+
+2. Corporate bond spreads, industrial production growth, and price-earnings ratios son los componentes principales de la aversión al riesgo a nivel agregado en la mayoría de los países de la muestra.
+
+3. En promedio, Japón, Suiza y Francia son los países más aversos.
+
+4. En promedio Estados Unidos, China y Reino Unido son los menos aversos.
+
+5. Usando datos de panel, encontramos que la función de aversión al riesgo puede predecir los retornos accionarios de los próximo 12 meses.
+
+6. El resultado es robusto al agregar como controles \red{variance risk premium}, \red{investor’s sentiment} e incertidumbre económica (EPU).
