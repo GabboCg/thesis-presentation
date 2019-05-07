@@ -8,11 +8,11 @@ institute: |
   | Universidad de Chile
   | Facultad de Economía y Negocios
   
-email: "gcabrerag@fen.uchile.cl"
-website: "gcabrerag.rbind.io"
-twitter: "GaboC_g"
-github: "GaboCg"
-ubication: "Facultad de Economía & Negocios, Universidad de Chile"
+# email: "gcabrerag@fen.uchile.cl"
+# website: "gcabrerag.rbind.io"
+# twitter: "GaboC_g"
+# github: "GaboCg"
+# ubication: "Facultad de Economía & Negocios, Universidad de Chile"
 
 output: 
   beamer_presentation:
@@ -23,7 +23,7 @@ output:
     slide_level: 2
     citation_package: biblatex
     latex_engine: xelatex
-
+    
 bibliography: "biblio.bib"
 biblio-style: "plainnat"
 biblio-title: "Referencia"
@@ -44,11 +44,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 * Interes en estudiar las propiedades de algunos proxies tales como VIX, *Variance Risk Premium* (VRP), entre otros.
 
-* Estimamos una función *time-varying risk aversion* (TVRA) siguiendo los parametros de @bollerslev2011dynamic.
+* Se estima una función *time-varying risk aversion* (TVRA) siguiendo los parametros de @bollerslev2011dynamic.
 
 * 8 países (Francia, Alemania, Reino Unido, China, Japón, Suiza, Estados Unidos y Corea del Sur).
 
-* Estudiamos si la variable TVRA puede predecir el retorno accionario *in-sample*. 
+* Se estudia si la variable TVRA puede predecir el retorno accionario *in-sample*. 
 
 # Estimación Aversion al riesgo 
 
@@ -58,17 +58,17 @@ knitr::opts_chunk$set(echo = FALSE)
 
 \begin{equation}
 \begin{array}{c}
-dp_{t}=\mu_{t}()dt+\sqrt{V_{t}}dB_{1t}\\
-dV_{t}=\kappa(\theta-V_{t})dt+\sigma_{t}()dB_{2t}
+dp_{t}=\mu_{t}(\cdot)dt+\sqrt{V_{t}}dB_{1t}\\
+dV_{t}=\kappa(\theta-V_{t})dt+\sigma_{t}(\cdot)dB_{2t}
 \end{array}
 \end{equation}
 
-* @Bollerslev2002 muestran que la distribución *risk-neutral* está dado por:
+\qquad y la distribución neutral al riesgo está dado por:
 
 \begin{equation}
 \begin{array}{c}
 dp_{t}=r_{t}^{*}dt+\sqrt{V_{t}}dB_{1t}^{*}\\
-dV_{t}=\kappa^{*}(\theta^{*}-V_{t})dt+\sigma_{t}()dB_{2t}^{*}
+dV_{t}=\kappa^{*}(\theta^{*}-V_{t})dt+\sigma_{t}(\cdot)dB_{2t}^{*}
 \end{array}
 \end{equation}
 
@@ -88,7 +88,7 @@ $$
 IV^{*}_{t,t+\Delta}=2\int\frac{C(t+\Delta,K)-C(t+\Delta)}{K^{2}}dK
 $$
 
-* Donde $C(t+\Delta,K)$ es el precio de una opción Europea con madurez al tiempo $t$ con precio *strike* $K$, es igual a la expectativa real de neutralidad de riesgo de la volatilidad integrada 
+* Donde $C(t+\Delta,K)$ es el precio de una opción Europea con madurez al tiempo $t$ con precio *strike* $K$, que es igual al verdadero riesgo neutral de la volatilidad integrada:
 
 \begin{equation}
 \text{\ensuremath{IV}}_{t,t+\Delta}^{*}=\text{E}^{*}(\mathcal{V}_{t,t+\Delta}|\mathfrak{F}_{t})
@@ -108,41 +108,50 @@ son funciones del los parámetros $\kappa$, $\theta$ y $\lambda$.
 
 * Dados los momentos de (3) y (5), se utiliza el método de estimación GMM.
 
-* Consideramos los momentos definidos en (3) y (5), y el rezago de la volatilidad realizada como instrumento adicional.
+* Se considera los momentos definidos en (3) y (5), y el rezago de la volatilidad realizada como instrumento adicional.
 
 * El conjunto final de los momentos para recuperar el vector de parametros $\xi=(\kappa,\theta,\lambda)$ es:
 
-$$
+\begin{equation}
 f_t(\xi) \equiv \left(\begin{array}{c}
                 \nu_{t+\Delta,t+2\Delta} - \alpha_{\Delta} \nu_{t,t+\Delta} - \beta_{\Delta} \\
                 (\nu_{t+\Delta,t+2\Delta} - \alpha_{\Delta} \nu_{t,t+\Delta} - \beta_{\Delta})\nu_{t-\Delta,t} \\
                 \nu_{t,t+\Delta} - \mathcal{A}_{\Delta} iv^{*}_{t,t+\Delta} - \mathfrak{B}_{\Delta} \\
                 (\nu_{t,t+\Delta} - \mathcal{A}_{\Delta} iv^{*}_{t,t+\Delta} - \mathfrak{B}_{\Delta})\nu_{t-\Delta,t}
                 \end{array}\right)
-$$
+\end{equation}
 
 * Por construcción $\text{E}(f_{t}(\xi)|\mathcal{G}_{t})=0$, y el estimador GMM es definido como:
 
 \vspace{-2mm}
 
-$$
+\begin{equation}
 \hat{\xi_{t}} =\text{arg}\min_{\xi}g_{t}(\xi)'Wg_{t}({\xi})
-$$
-
+\end{equation}
 
 ## Datos
 
-1. La muestra está compuesta por 8 países; Francia, Alemania, Reino Unido, China, Japón, Suiza, Estados Unidos y Corea del Sur.
+* La volatilidad realizada es computada para cada mes como la suma al cuadrado de los retornos diarios en el mes:
 
-2. La volatilidad realizada es computada para cada mes como la suma al cuadrado de los retornos diarios en es mes.
-
-$$
+\begin{equation}
 RV_{t}\equiv\sum_{i=1}^{n}\left(p_{t+\frac{i}{n}}-p_{t+\frac{i-1}{n}}\right)^{2}
-$$
+\end{equation}
 
-3. La volatilidad implicita se obtiene del índice VIX de cada país.
+* La volatilidad implicita se obtiene del índice VIX de cada país.
+
+* Tanto los retornos de los índices como la volatilidad implícita (VIX) se obtienen de 
+Bloomberg, con una frecuencia mensual.
+
+* La muestra contiene información para Francia (CAC y VCAC), Alemania
+(DAX 30 y VDAX), Reino Unido (FTSE 100 y VFTSE), China (HSI y
+VHSI), Japon (NIKKEI 225 y VXJ), Suiza (SMI 20 y VSMI), Estados Unidos (S&P 500 y VIX), y 
+Corea del Sur (KOSPI y VKOSPI). 
 
 ## Estadística Descriptiva
+
+* Tanto la volatilidad implícita como realizada tiene *skewness* y *kurtosis* altas y positivas. No es sorprendente a la luz de la literatura empírica sobre los datos de los Estados Unidos.
+
+\vspace{-0.50cm}
 
 \begin{table}
 \caption{\scriptsize Summary Statistics for Monthly Realized and Implied Volatility\label{tab:Summary-Statistics}}
@@ -171,22 +180,26 @@ Max. & 84.61  & 59.09 & 80.62 & 52.78 & 79.29 & 59.98 & 110.26  & 71.97  & 109.6
 }
 \end{table}
 
-#  Time-varying Risk Aversion
+# Constante vs Time-varying Risk Aversion
 
 ## Estimación País 
 
-1. @bollerslev2011dynamic muestra que la \red{volatility risk premium} es proporcional a la aversión al riesgo del inversionista, aproximandose mediante $-\lambda$.
+* La \red{volatility risk premium} es proporcional al coeficiente de aversión al riesgo de una inversionista representativo, bajo los siguientes supuestos:
 
-2. Para incorporar variación en el tiempo, se implementa un AR(1) aumentado.
+    * \red{Volatility risk premium} lineal.
+    * La volatilidad estocástica es $\sigma{(\cdot)}=\sigma \sqrt{V_t}$.
 
-$$
+\begin{equation}
+U(W_{t})=e^{-\delta t} \bigg( \frac{W^{1-\gamma}_{t}}{1-\gamma} \bigg)
+\end{equation}
+
+* Para incorporar variación en el tiempo, @bollerslev2011dynamic proponen implemenar un proceso AR(1) aumentado.
+
+\begin{equation}
 \lambda_{t+1} = \alpha + b \lambda_{t} + \sum^{k}_{k=1}c_{k}\times state_{t,k}
-$$
+\end{equation}
 
-3. Se incluye en $x_{t,k}$ el rezago de la volatilidad realizada al cuadrado, rezago de la volatilidad implícita y con cunjunto de varialbes macro-financieras.
-\red{Aaa corporate bond spreads}, \red{housing starts}, \red{industrial production}, \red{Producer price index}, \red{Total payroll employment} y \red{Price-earnings (PE) ratio}.
-
-## 
+##
 
 \begin{table}[H]
 \caption{\scriptsize GMM Estimates of Constant and Time-Varying Volatility Risk Premium Function}
@@ -234,7 +247,7 @@ $c_{7}$ PE Ratio &  & 0.440{*}{*} &  & 0.384{*}{*}{*} &  & 0.393{*}{*}{*} &  & 0
 ##
 
 \begin{table}[H]
-\caption{GMM Estimates of Constant and Time-Varying Volatility Risk Premium Function}
+\caption{\scriptsize GMM Estimates of Constant and Time-Varying Volatility Risk Premium Function}
 \resizebox{0.9\textwidth}{!}{%
 \centering
 \begin{tabular}{lcccccccccccccccc}
@@ -276,9 +289,22 @@ $c_{7}$ PE Ratio &  & 0.302{*}{*} &  & 0.302{*}{*}{*} &  & 0.114{*}{*} &  & 0.26
 }
 \end{table}
 
+## Resultados
+
+* La constante estimada $\lambda$ varía entre 1.77 para Alemania y 4.71 para Francia. El coeficiente es significativo para 7 de los 8 países (Alemania es la excepción).
+
+* En el caso de la tasa de crecimiento de la variable \red{housing starts}, para siete países el coeficiente mínimo estimado es -0.32 (Francia) y máximo -0.10 (Alemania).
+
+* El rezago de la volatilidad realizada presenta un signo negativo y significativo.
+
+* El signo de los coeficientes estimados son consistente con lo esperado. La mayoría de los resultados parecen estar alineados con la premisa que la aversión al riesgo aumenta cuando los mercados están \red{bear} y decresen en los \red{bull}.
+
+
 ## Time-Varying Risk Aversion & Business Cycle 
 
-1. @kim2014counter evidencia que la correlación dinámica  entre la aversión al riesgo y el desempleo disminuye a lo largo del tiempo. Concluyendo que la variable tiene un comportamiento contra cíclico. 
+* Los modelos de \red{asset pricing} con \red{habito} predicen que la aversión al riesgo es contra cíclica.
+
+* @kim2014counter evidencia que la correlación dinámica  entre la aversión al riesgo y el desempleo disminuye a lo largo del tiempo. Concluyendo que la variable tiene un comportamiento contra cíclico. 
 $$
 Corr(-\lambda_{t}^{i},Uempl_{t+k}^{i})
 $$
@@ -286,7 +312,7 @@ $$
 \vspace{-0.5cm}
 
 \begin{table}[H]
-\caption{Correlation between Time-varying Risk Aversion and Unemployment Rate\label{tab:Correlation-between-time-varying}}
+\caption{\scriptsize Correlation between Time-varying Risk Aversion and Unemployment Rate\label{tab:Correlation-between-time-varying}}
 \resizebox{\textwidth}{!}{%
 \centering
 \begin{tabular}{lccccccccccc}
@@ -310,9 +336,17 @@ South Korea (KOSPI) & 0.132{*} & 0.125 & 0.120 & 0.117 & 0.113 & 0.099 & 0.084 &
 
 ## Estimación Panel 
 
-$$
+* El uso de datos de panel reduce el problema de \red{data-mining} y mejora la eficiencia de la estimación.
+
+* Se estima el siguiente modelo panel:
+
+\begin{equation}
 h^{-1}r_{t,t+h}^{i}=a(h)+b(h)TVRA_{t}^{i}+\gamma(h)'\mathbf{X}_{t}^{i} + \alpha_{i} + u_{t,t+h}^{i} \qquad h=1,2,...,12 
-$$
+\end{equation}
+
+* $TVRA_{t}^{i}$ representa el índice de \red{time-varying risk aversion}, y $\mathbf{X}_{t}^{i}$ el conjunto de variables de control.
+
+* Las variables de control en $\mathbf{X}_{t}^{i}$ son: \red{VRP}, \red{sentiment (consumer confidence index)} e incertidumbre económica (\red{Economic Policy Uncertainty index}).
 
 ##
 
@@ -408,9 +442,29 @@ Panel E: Baseline + All controls variables
 \end{center}
 \end{table}
 
-## Regresión a Nivel País
+## Resultados Panel
 
-## 
+\justifying
+
+* En el panel A, se observa que el TVRA ayuda a pronosticar el retorno futuro para todos los horizontes considerados. El coeficiente estimado, $b(h)$, es positivo, como se esperaba y significativo. Va desde 1.21 en $h=1$ hasta 0.11 para $h=12$.
+
+* Se esperaba un perdida de significancia predictiva para el TVRA cuando la variable VRP es incluida en la especificación. La estimación muestra que este no es el caso, debido a que el coeficiente TVRA permanece significativo duarante los horizontes considerados. 
+
+* El coeficiente de la variable \red{sentiment} es negativa, consistente con la evidencia de @schmeling2009investor, sin embargo, no se encuentra evidencia de significancia estadística.
+
+* Ante la inclusión de incertidumbre (\red{EPU}), el TVRA permanece positiva y estadísticamente significativa. Se documenta que el coeficiente del índice \red{EPU} durante los horizontes es positivo, pero no estadísticamente significativo.
+
+## Regresión Individual por País
+
+<!-- * Como ejercicio final, se estudio la relación entre la variable TVRA y el retorno accionario para cada país de manera individual. -->
+
+<!-- *  Se encuentra que 5 de los 8 países en la muestra, la variable TVRA tiene poder predictivo en al menos un tercio de los horizontes considerados. -->
+
+<!-- * El efecto es fuerte en Reino Unido y Corea del Sur, durante los 12 meses. -->
+
+<!-- * No se encuentra evidencia para Francia, China y Estados Unidos. -->
+
+<!-- ##  -->
 
 \begin{table}[H]
 \caption{\scriptsize Stock Return Predictability Regressions by Country}
@@ -446,14 +500,14 @@ Panel E: Baseline + All controls variables
 
 ## Conclusiones
 
-1. La función de aversión al riesgo es contra cíclica, consitente con la teoría de \red{asset pricing}.
+* La función de aversión al riesgo es contra cíclica, consitente con la teoría de \red{asset pricing}.
 
-2. Corporate bond spreads, industrial production growth, and price-earnings ratios son los componentes principales de la aversión al riesgo a nivel agregado en la mayoría de los países de la muestra.
+* Corporate bond spreads, industrial production growth, and price-earnings ratios son los componentes principales de la aversión al riesgo a nivel agregado en la mayoría de los países de la muestra.
 
-3. En promedio, Japón, Suiza y Francia son los países más aversos.
+* En promedio, Japón, Suiza y Francia son los países más aversos.
 
-4. En promedio Estados Unidos, China y Reino Unido son los menos aversos.
+* En promedio Estados Unidos, China y Reino Unido son los menos aversos.
 
-5. Usando datos de panel, encontramos que la función de aversión al riesgo puede predecir los retornos accionarios de los próximo 12 meses.
+* Usando datos de panel, encontramos que la función de aversión al riesgo puede predecir los retornos accionarios de los próximo 12 meses.
 
-6. El resultado es robusto al agregar como controles \red{variance risk premium}, \red{investor’s sentiment} e incertidumbre económica (EPU).
+* El resultado es robusto al agregar como controles \red{variance risk premium}, \red{investor’s sentiment} e incertidumbre económica (EPU).

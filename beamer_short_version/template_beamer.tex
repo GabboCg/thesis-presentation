@@ -274,12 +274,6 @@ $endfor$
        commandchars=\\\{\}
 }
                                                    
-% declare overall beamer theme to use as baseline
-\usepackage{ragged2e}
-\apptocmd{\frame}{}{\justifying}{}
-
-\usepackage{etoolbox}
-
 \AtBeginDocument{%
   \letcs\oig{@orig\string\includegraphics}%
   \renewcommand<>\includegraphics[2][]{%
@@ -340,24 +334,36 @@ $endfor$
 
 \usepackage{booktabs}
 
+% declare overall beamer theme to use as baseline
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+
+\apptocmd{\frame}{}{\justifying}{}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+
+\AtBeginBibliography{\scriptsize}
+
 \begin{document}
 
 $if(title)$
 \frame{\titlepage}
 $endif$
 
-\begin{frame}
-\frametitle{Información de contacto} 
-
-\begin{center}
-
-\faSend  \enskip \href{mailto:}{$email$} \\
-\faChain \enskip \href{https://$website$/}{$website$} \\
-\faTwitter \enskip \href{https://twitter.com/@$twitter$}{$twitter$}  \\
-\faGithub \enskip \href{https://github.com/@$github$}{$github$} \\
-\faMapMarker \enskip $ubication$ 
-\end{center}
-\end{frame}
+% \begin{frame}
+% \frametitle{Información de contacto} 
+% 
+% \begin{center}
+% 
+% \faSend  \enskip \href{mailto:}{$email$} \\
+% \faChain \enskip \href{https://$website$/}{$website$} \\
+% \faTwitter \enskip \href{https://twitter.com/@$twitter$}{$twitter$}  \\
+% \faGithub \enskip \href{https://github.com/@$github$}{$github$} \\
+% \faMapMarker \enskip $ubication$ 
+% \end{center}
+% \end{frame}
 
 $for(include-before)$
 $include-before$
@@ -394,7 +400,6 @@ $if(biblatex)$
 \begin{frame}[allowframebreaks]{$biblio-title$}
 \printbibliography[heading=none]
 \end{frame}
-
 $endif$
 $for(include-after)$
 $include-after$
