@@ -48,7 +48,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 * 8 países (Francia, Alemania, Reino Unido, China, Japón, Suiza, Estados Unidos y Corea del Sur).
 
-* Se estudia si la variable TVRA puede predecir el retorno accionario *in-sample*. 
+* Se estudia si la variable TVRA puede predecir el retorno accionario. 
 
 # Estimación Aversion al riesgo 
 
@@ -82,7 +82,7 @@ dV_{t}=\kappa^{*}(\theta^{*}-V_{t})dt+\sigma_{t}(\cdot)dB_{2t}^{*}
 \text{E}(\mathcal{V}_{t+\Delta,t+2\Delta}|\mathfrak{F}_{t})=\alpha_{\Delta}\text{E}(\mathcal{\mathcal{V}}_{t,t+\Delta}|\mathfrak{F}_{t})+\beta_{\Delta}
 \end{equation}
 
-* @britten2000option prueban que la medida de volatilidad puede ser computada como el promedio de un continuo de *$\Delta$-maturity options*.
+* @britten2000option prueban que la medida de volatilidad puede ser computada como la integral de un continuo de *$\Delta$-maturity options*.
 
 $$
 IV^{*}_{t,t+\Delta}=2\int\frac{C(t+\Delta,K)-C(t+\Delta)}{K^{2}}dK
@@ -149,13 +149,14 @@ Corea del Sur (KOSPI y VKOSPI).
 
 ## Estadística Descriptiva
 
-* Tanto la volatilidad implícita como realizada tiene *skewness* y *kurtosis* altas y positivas. No es sorprendente a la luz de la literatura empírica sobre los datos de los Estados Unidos.
+* Tanto la volatilidad implícita como realizada tiene *skewness* y *kurtosis* altas y positivas.
+
+<!-- No es sorprendente a la luz de la literatura empírica sobre los datos de los Estados Unidos. -->
 
 \vspace{-0.50cm}
 
 \begin{table}
 \caption{\scriptsize Summary Statistics for Monthly Realized and Implied Volatility\label{tab:Summary-Statistics}}
-\vspace{-0.30cm}
 \resizebox{\textwidth}{!}{%
 \centering
 \begin{tabular}{lcccccccccccccccc}
@@ -304,7 +305,7 @@ $c_{7}$ PE Ratio &  & 0.302{*}{*} &  & 0.302{*}{*}{*} &  & 0.114{*}{*} &  & 0.26
 
 * Los modelos de \red{asset pricing} con \red{habito} predicen que la aversión al riesgo es contra cíclica.
 
-* @kim2014counter evidencia que la correlación dinámica  entre la aversión al riesgo y el desempleo disminuye a lo largo del tiempo. Concluyendo que la variable tiene un comportamiento contra cíclico. 
+* @kim2014counter evidencia que la correlación entre la aversión al riesgo y el desempleo disminuye a lo largo del tiempo. Concluyendo que la variable tiene un comportamiento contra cíclico. 
 $$
 Corr(-\lambda_{t}^{i},Uempl_{t+k}^{i})
 $$

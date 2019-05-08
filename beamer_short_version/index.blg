@@ -1,14 +1,14 @@
-[0] Config.pm:302> INFO - This is Biber 2.11
-[0] Config.pm:305> INFO - Logfile is 'index.blg'
-[22] biber-MSWIN64:313> INFO - === 
-[40] Biber.pm:371> INFO - Reading 'index.bcf'
-[104] Biber.pm:857> INFO - Found 7 citekeys in bib section 0
-[116] Biber.pm:3976> INFO - Processing section 0
-[128] Biber.pm:4136> INFO - Looking for bibtex format file 'biblio.bib' for section 0
-[133] bibtex.pm:1500> INFO - LaTeX decoding ...
-[216] bibtex.pm:1316> INFO - Found BibTeX data source 'biblio.bib'
-[259] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[259] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
-[259] Biber.pm:3804> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'es-ES'
-[267] bbl.pm:617> INFO - Writing 'index.bbl' with encoding 'UTF-8'
-[271] bbl.pm:720> INFO - Output to index.bbl
+[0] Config.pm:304> INFO - This is Biber 2.12
+[0] Config.pm:307> INFO - Logfile is 'index.blg'
+[33] biber:315> INFO - === mié may  8, 2019, 14:10:42
+[56] Biber.pm:371> INFO - Reading 'index.bcf'
+[129] Biber.pm:889> INFO - Found 7 citekeys in bib section 0
+[144] Biber.pm:4093> INFO - Processing section 0
+[156] Biber.pm:4254> INFO - Looking for bibtex format file 'biblio.bib' for section 0
+[160] bibtex.pm:1523> INFO - LaTeX decoding ...
+[289] bibtex.pm:1340> INFO - Found BibTeX data source 'biblio.bib'
+[363] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[363] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[363] Biber.pm:3921> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'es-ES'
+[372] bbl.pm:636> INFO - Writing 'index.bbl' with encoding 'UTF-8'
+[379] bbl.pm:739> INFO - Output to index.bbl
